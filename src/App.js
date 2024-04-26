@@ -221,7 +221,7 @@ const App = () => {
         if (response.status === 200) {
           try {
             const response = await axios.post(
-              "https://studykey-riddles-server.vercel.app",
+              "https://studykey-riddles-server.vercel.app/submit-review",
               formData
             );
             if (response.status === 200) {
