@@ -32,7 +32,7 @@ i18n.use(initReactI18next).init({
         findOrder: "How to find your Order ID",
         step1:
           "<1>Step 1</1> Log in to your Amazon account, at the bottom click icon.",
-        step2: "<1>Step 2</1> under your account name click “”your orders” ",
+        step2: `"<1>Step 2</1> under your account name click “your orders” "`,
         step3: "<1>Step 3<1> Find your order and click on it ",
         step4: "<1>Step 4<1> scroll down Click “View Order details”.",
         step5: "<1>Step 5<1> You will see your order ID.",
@@ -205,7 +205,7 @@ const App = () => {
     // If all checks pass, proceed to the next step
     if (!newErrors.set && !newErrors.orderId) {
       const validateOrderPromise = axios.post(
-        "http://localhost:5000/validate-order-id",
+        "https://studykey-riddles-server.vercel.app/validate-order-id",
         { orderId: formData.orderId }
       );
 
@@ -221,7 +221,7 @@ const App = () => {
         if (response.status === 200) {
           try {
             const response = await axios.post(
-              "http://localhost:5000/submit-review",
+              "https://studykey-riddles-server.vercel.app",
               formData
             );
             if (response.status === 200) {
