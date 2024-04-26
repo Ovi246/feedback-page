@@ -1,71 +1,102 @@
-import { useEffect, useState } from "react";
-import { CSSTransition, SwitchTransition } from "react-transition-group";
-import toast, { Toaster } from "react-hot-toast";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Fireworks from "@fireworks-js/react";
-import Popup from "reactjs-popup";
+import toast, { Toaster } from "react-hot-toast";
 import i18n from "i18next";
-import { initReactI18next, useTranslation } from "react-i18next";
+import { Trans, initReactI18next, useTranslation } from "react-i18next";
 
 i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        solveRiddlePrompt: "Can you solve the riddle?",
-        riddle: `"I'm a pack of fun, now wrapping, just cards in a stack, Each one's a
-        gem, knowledge that won't lack. Flip me around, see what's in store,
-        A gift for your brain, a learning encore, Give it a whirl, I'm the
-        flashiest thing in your study world! What am I?"`,
-        buttonPlaceholder: "Enter your answer",
-        buttonText: "Submit",
+        welcome: `"Hola amigo! Welcome to our Language Learning Club! Your purchase of our flashcards shows your dedication to your language learning goals, so we'd like to offer you our exclusive E-Practice booklet to help you accomplish your goal faster! This booklet is tailored to fit any language level and is not available on the market yet! You are the first to get your hands on it.
+        "`,
+        langQues: `What language are you mastering?`,
+        langPara: "We will use this to match you with the right lesson plan.",
+        langOption: "Select a language",
+        levelQues: "What level would you place yourself?",
+        levelPara:
+          "We will use this information to build products to meet your future needs.",
+        levelOption: "Select a level",
+        name: "What do we call you language lover!?",
+        email: "What is your best email?",
+        emailPara:
+          "We will use it to send you, your E- PRACTICE BOOKLET, Promo codes, and new innovative Learning tips",
+        orderQues: "What is your order ID?",
+        orderPara: "Here is the steps to how you can find your order ID --->",
+        setQues: "Which study key set are you learning with?",
+        thankYou: "Thank you",
+        thankYouP1:
+          "Thank you for taking this huge leap towards your learning journey, we will email you, Your FREE E-PRACTICE BOOKET!",
+        thankYouP2:
+          "In the mean time practice makes perfect Use your new study key flashcards to their full potential and watch out for our email!",
+        findOrder: "How to find your Order ID",
+        step1:
+          "<1>Step 1</1> Log in to your Amazon account, at the bottom click icon.",
+        step2: "<1>Step 2</1> under your account name click “”your orders” ",
+        step3: "<1>Step 3<1> Find your order and click on it ",
+        step4: "<1>Step 4<1> scroll down Click “View Order details”.",
+        step5: "<1>Step 5<1> You will see your order ID.",
       },
     },
     es: {
       translation: {
-        solveRiddlePrompt: "¿Puedes resolver el acertijo?",
-        riddle: `"Soy un paquete de diversión, ahora envuelto, solo cartas en una pila, Cada una es una joya, conocimiento que no faltará. Dame la vuelta, mira lo que hay en la tienda,
-        Un regalo para tu cerebro, un bis de aprendizaje. Dale una vuelta, soy el
-        ¡Lo más llamativo de tu mundo de estudio! ¿Qué soy yo?"`,
-        buttonPlaceholder: "Introduce tu respuesta",
-        buttonText: "Entregar",
+        welcome: `"¡Hello friend! ¡Bienvenido a nuestro Club de Aprendizaje de Idiomas! Tu compra de nuestras tarjetas educativas muestra tu dedicación a tus metas de aprendizaje de idiomas, por lo que nos gustaría ofrecerte nuestro exclusivo cuadernillo electrónico de práctica para ayudarte a alcanzar tu objetivo más rápido. Este cuadernillo está adaptado para cualquier nivel de idioma y aún no está disponible en el mercado. ¡Tú eres el primero en tenerlo en tus manos!
+        "`,
+        langQues: `¿Qué idioma estás dominando?`,
+        langPara:
+          "Lo utilizaremos para emparejarte con el plan de lecciones adecuado.",
+        langOption: "Selecciona un idioma",
+        levelQues: "¿En qué nivel te situarías?",
+        levelPara:
+          "Utilizaremos esta información para crear productos que satisfagan tus necesidades futuras.",
+        levelOption: "Selecciona un nivel",
+        name: "¡Cómo te llamamos, amante de los idiomas!?",
+        email: "¿Cuál es tu mejor correo electrónico?",
+        emailPara: `"Lo utilizaremos para enviarte tu CUADERNILLO ELECTRÓNICO DE PRÁCTICA, códigos promocionales y nuevos consejos innovadores para el aprendizaje.
+        "`,
+        orderQues: "¿Cuál es tu ID de pedido?",
+        orderPara:
+          "Aquí están los pasos sobre cómo puedes encontrar tu ID de pedido --->",
+        setQues: "¿Con qué conjunto de Study Key estás aprendiendo?",
+        thankYou: "¡Gracias",
+        thankYouP1:
+          "Gracias por dar este gran paso hacia tu viaje de aprendizaje, te enviaremos por correo electrónico ¡Tu CUADERNILLO ELECTRÓNICO DE PRÁCTICA GRATIS!",
+        thankYouP2:
+          "Mientras tanto, la práctica hace al maestro. Usa tus nuevas tarjetas educativas de Study Key al máximo y ¡estate atento a nuestro correo electrónico!",
+        findOrder: "Cómo encontrar su ID de pedido",
+        step1:
+          "<1>Paso 1</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
+        step2:
+          "<1>Paso 2</1> bajo el nombre de tu cuenta haz clic en “tus pedidos”.",
+        step3: "<1>Paso 3</1> Encuentra tu pedido y haz clic en él.",
+        step4:
+          "<1>Paso 4</1> desplázate hacia abajo y haz clic en “Ver detalles del pedido.",
+        step5: "<1>Paso 5</1> Verás tu ID de pedido.",
       },
     },
     // Add more languages here
   },
-  lng: "en", // Default language
+  lng: "es", // Default language
   fallbackLng: "en", // Use English if the language can't be detected
   interpolation: { escapeValue: false },
 });
 
-// Your form component
-function Form() {
+const App = () => {
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [completedSteps, setCompletedSteps] = useState([]);
-  const [asin, setAsin] = useState();
   const [formData, setFormData] = useState({
-    productName: "",
-    satisfaction: null,
-    orderId: "",
-    duration: "",
-    firstName: "",
-    lastName: "",
+    language: "",
+    level: "",
+    name: "",
     email: "",
-    address: "",
-    city: "",
-    zip: "",
-    state: "",
-    newsletter: "",
-    reviews: "",
+    orderId: "",
+    set: "",
   });
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [answer, setAnswer] = useState("");
-  const [attempts, setAttempts] = useState(3);
-  const [showFireworks, setShowFireworks] = useState(false);
-  const [showReward, setShowReward] = useState(false);
-  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [activeTab, setActiveTab] = useState("mobile");
+  const [displayedImage, setDisplayedImage] = useState("amazonMobile.png");
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("es");
 
   useEffect(() => {
     async function fetchLocationAndSetLanguage() {
@@ -99,736 +130,589 @@ function Form() {
     setLanguage(event.target.value);
   };
 
-  const checkAnswer = () => {
-    if (answer.toLowerCase() === "flashcards") {
-      setIsCorrect(true);
-      setShowFireworks(true);
-      setTimeout(() => {
-        setShowFireworks(false);
-      }, 5000); // Fireworks will disappear after 5 seconds
-      setShowReward(true);
-    } else if (attempts > 1) {
-      setAttempts(attempts - 1);
-    } else {
-      alert("The correct answer is: flashcards");
-      setAttempts(0);
+  const nextStep = () => {
+    let newErrors = {
+      language: "",
+      level: "",
+      name: "",
+      email: "",
+      set: "",
+      orderId: "",
+    };
+
+    // Validation logic
+    if (formData.language === "" && step === 1) {
+      newErrors.language = "Please select an option for the language.";
+    }
+    if (formData.level === "" && step === 1) {
+      newErrors.level = "Please select an option for the level.";
+    }
+    if (formData.name === "" && step === 2) {
+      newErrors.name = "Please fill in the name field.";
+    }
+    if (formData.email === "" && step === 2) {
+      newErrors.email = "Please fill in the email field.";
+    }
+    if (formData.set === "" && step === 3) {
+      newErrors.set = "Please fill in the set field.";
+    }
+    if (formData.orderId === "" && step === 3) {
+      newErrors.orderId = "Please fill in the orderId field.";
+    }
+
+    setErrors(newErrors);
+
+    // If all checks pass, proceed to the next step
+    if (
+      !newErrors.language &&
+      !newErrors.level &&
+      !newErrors.name &&
+      !newErrors.email &&
+      !newErrors.set &&
+      !newErrors.orderId
+    ) {
+      setStep(step + 1);
     }
   };
 
-  const claimReward = () => {
-    setShowFeedbackForm(true);
+  const prevStep = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
   };
 
-  const handleNextStep = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    if (step === 2) {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let newErrors = {
+      set: "",
+      orderId: "",
+    };
+
+    // Validation logic
+    if (formData.set === "" && step === 3) {
+      newErrors.set = "Please fill in the set field.";
+    }
+    if (formData.orderId === "" && step === 3) {
+      newErrors.orderId = "Please fill in the orderId field.";
+    }
+
+    setErrors(newErrors);
+
+    // If all checks pass, proceed to the next step
+    if (!newErrors.set && !newErrors.orderId) {
+      const validateOrderPromise = axios.post(
+        "http://localhost:5000/validate-order-id",
+        { orderId: formData.orderId }
+      );
+
+      toast.promise(validateOrderPromise, {
+        loading: "Validating order...",
+        success: "Order validated",
+        error:
+          "Order ID does not match. Please make sure to put the correct Amazon order number.",
+      });
+
       try {
-        const response = await axios.post(
-          "https://studykey-riddles-server.vercel.app/validate-order-id",
-          { orderId: formData.orderId },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setAsin(response.data.asins[0]);
-      } catch (error) {
-        if (error.response.status === 400) {
-          toast.error(
-            "Order ID does not match. Please make sure to put the correct Amazon order number."
-          );
-        } else {
-          toast.error("Internal server error! Please try again later!");
+        const response = await validateOrderPromise;
+        if (response.status === 200) {
+          try {
+            const response = await axios.post(
+              "http://localhost:5000/submit-review",
+              formData
+            );
+            if (response.status === 200) {
+              setStep(step + 1);
+            }
+          } catch (error) {}
         }
+      } catch (error) {
         setLoading(false);
         return;
       }
     }
-
-    setTimeout(() => {
-      setStep(step + 1);
-      setCompletedSteps([...completedSteps, step]);
-      setLoading(false);
-    }, 1000); // simulate loading time
   };
-
-  const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "https://studykey-riddles-server.vercel.app/submit-review",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Form submitted successfully!");
-        setTimeout(() => {
-          setStep(step + 1);
-          setCompletedSteps([...completedSteps, step]);
-          setLoading(false);
-        }, 1000); // simulate loading time
-      }
-    } catch (error) {}
-  };
-
-  const handleStepClick = (stepNumber) => {
-    if (completedSteps.includes(stepNumber)) {
-      setStep(stepNumber);
-    }
-  };
-
-  function StarIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    );
-  }
-
-  if (!showFeedbackForm) {
-    return (
-      <div className="h-screen w-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-blue-500 to-pink-500 font-poppins">
-        <img
-          alt="Logo"
-          className="rounded-full border aspect-square object-contain mx-auto"
-          height="200"
-          src="logo.png"
-          width="200"
-        />
-        <div className="min-h-[250px] w-full md:w-[700px] rounded-xl bg-white bg-opacity-30 backdrop-blur-[10px] p-6 text-white flex flex-col items-center justify-center">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              {t("solveRiddlePrompt")}
-            </h1>
-          </div>
-          <p className="text-lg font-semibold leading-none border-2 border-white rounded-md p-4 mt-5 text-center w-full md:w-3/2">
-            {t("riddle")}
-          </p>
-          <div className="flex flex-col gap-5 w-full md:min-w-[400px] justify-center md:flex-row mt-5">
-            <input
-              className="w-full md:max-w-sm bg-transparent border-b-2 border-t-2 placeholder-white placeholder-opacity-50 py-2 px-4 rounded-md"
-              placeholder={t("buttonPlaceholder")}
-              type="text"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-            />
-            <button
-              className="bg-white bg-opacity-30 backdrop-blur-[10px] text-white shadow-md p-2 rounded-md"
-              onClick={checkAnswer}
-            >
-              {t("buttonText")}
-            </button>
-          </div>
-          {attempts < 3 && <p>Remaining attempts: {attempts}</p>}
-        </div>
-        <select
-          className="mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          onChange={changeLanguage}
-          value={language}
-        >
-          <option value="en">English</option>
-          <option value="es">Spanish</option>
-        </select>
-        {isCorrect && (
-          <Popup
-            open={showReward}
-            closeOnDocumentClick
-            onClose={() => setShowReward(false)}
-            modal
-            nested
-          >
-            <div className="modal bg-white p-5 rounded-lg flex flex-col gap-5">
-              <h1 className="text-xl font-bold">Congratulations!</h1>
-              <p>You've correctly answered the riddle!</p>
-              <button
-                onClick={claimReward}
-                className="bg-black text-white px-3 py-2 rounded-md"
-              >
-                Claim your free reward!
-              </button>
-            </div>
-          </Popup>
-        )}
-        {showFireworks && (
-          <Fireworks
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 9999,
-              pointerEvents: "none",
-            }}
-            options={{
-              speed: 3,
-              count: 200,
-              gravity: 0.3,
-              explosion: 50,
-              duration: 2 * 1000,
-
-              calc: (props, i) => ({
-                ...props,
-                x:
-                  (i % 2) * window.innerWidth -
-                  (i / 2) * window.innerWidth +
-                  (i % 2) * 100 -
-                  50,
-                y:
-                  window.innerHeight -
-                  200 +
-                  Math.random() * 100 -
-                  50 +
-                  (i === 2 ? -80 : 0),
-              }),
-            }}
-          />
-        )}
-      </div>
-    );
-  }
 
   return (
-    <>
-      {showFeedbackForm && (
-        <>
-          <Toaster
-            position="top-center"
-            reverseOrder={false}
-            gutter={8}
-            containerClassName=""
-            containerStyle={{}}
-            toastOptions={{
-              // Define default options
-              className: "",
-              duration: 5000,
-              style: {
-                background: "#363636",
-                color: "#fff",
-              },
+    <div className="min-h-screen items-center bg-blueBG w-full text-blueText">
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
 
-              // Default options for specific types
-              success: {
-                duration: 3000,
-                theme: {
-                  primary: "green",
-                  secondary: "black",
-                },
-              },
-            }}
-          />
-          <div className="max-w-2xl mx-auto p-6">
-            <div className="text-3xl font-bold my-8">Feedback Form</div>
-            <div className="flex justify-between items-center mb-8">
-              <div
-                className={`w-8 h-8 text-white rounded-full flex items-center justify-center ${
-                  step >= 1 ? "bg-black" : "bg-gray-300"
-                }`}
-                onClick={() => handleStepClick(1)}
-              >
-                1
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
+      <div className="">
+        {step === 1 && (
+          <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
+            <div className="w-full md:w-[40%] px-5 flex flex-col items-center box-content min-h-screen">
+              <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full">
+                <div className="flex gap-5 mt-2 items-center">
+                  <img src={"Logo.png"} alt="logo" className="w-20 h-20" />
+                  <select
+                    value={language}
+                    onChange={changeLanguage}
+                    className="border-2 
+                    bg-myOrange text-white p-2 rounded-md"
+                  >
+                    <option value="en">En</option>
+                    <option value="es">Es</option>
+                  </select>
+                </div>
+                <span className="font-rasputin text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                  Congratulations!
+                </span>
+                <p className="text-center mx-auto text-lg md:text-xl lg:text-2xl font-now">
+                  {t("welcome")}
+                </p>
+                <div className="p-3">
+                  <form>
+                    <label className="block mt-2 max-w-[600px]">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
+                        {t("langQues")}
+                      </span>
+                      <br></br>
+                      <span className="text-sm sm:text-base md:text-lg font-normal italic">
+                        {t("langPara")}
+                      </span>
+                      <select
+                        id="myInput"
+                        name="language"
+                        value={formData.language}
+                        required
+                        onChange={handleChange}
+                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      >
+                        <option value="">{t("langOption")}</option>
+                        <option value="English">English</option>
+                        <option value="Spanish">Spanish</option>
+                      </select>
+                      {errors.language && (
+                        <div className="text-red-500">{errors.language}</div>
+                      )}
+                    </label>
+                    <label className="block mb-5 max-w-[600px] mt-5">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
+                        {t("levelQues")}
+                      </span>
+                      <br></br>
+                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
+                        {t("levelPara")}
+                      </span>
+                      <select
+                        id="myInput"
+                        name="level"
+                        value={formData.level}
+                        onChange={handleChange}
+                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      >
+                        <option value="">{t("levelOption")}</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                      </select>
+                      {errors.level && (
+                        <div className="text-red-500">{errors.level}</div>
+                      )}
+                    </label>
+                  </form>
+                </div>
               </div>
-              <div
-                className={`flex-grow h-1 ${
-                  step >= 2 ? "bg-black" : "bg-gray-300"
-                }`}
-              ></div>
-              <div
-                className={`w-8 h-8 text-white rounded-full flex items-center justify-center ${
-                  step >= 2 ? "bg-black" : "bg-gray-300"
-                }`}
-                onClick={() => handleStepClick(2)}
-              >
-                2
-              </div>
-              <div
-                className={`flex-grow h-1 ${
-                  step >= 3 ? "bg-black" : "bg-gray-300"
-                }`}
-              ></div>
-              <div
-                className={`w-8 h-8 text-white rounded-full flex items-center justify-center ${
-                  step >= 3 ? "bg-black" : "bg-gray-300"
-                }`}
-                onClick={() => handleStepClick(3)}
-              >
-                3
-              </div>
-              <div
-                className={`flex-grow h-1 ${
-                  step >= 4 ? "bg-black" : "bg-gray-300"
-                }`}
-              ></div>
-              <div
-                className={`w-8 h-8 text-white rounded-full flex items-center justify-center ${
-                  step >= 4 ? "bg-black" : "bg-gray-300"
-                }`}
-                onClick={() => handleStepClick(4)}
-              >
-                4
+
+              <div className="">
+                <button
+                  className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
+                  onClick={nextStep}
+                >
+                  {" "}
+                  Next{" "}
+                </button>
               </div>
             </div>
-            <SwitchTransition>
-              <CSSTransition key={step} timeout={500} classNames="fade">
-                <>
-                  {step === 1 && (
-                    <form onSubmit={handleSubmit}>
-                      <h2 className="text-2xl font-semibold mb-4">
-                        PLEASE TELL US WHICH PRODUCT YOU’VE PURCHASED.
-                      </h2>
-                      <div className="mb-6">
-                        <label
-                          className="block text-sm font-medium mb-2"
-                          htmlFor="product"
-                        >
-                          Which product did you purchase? *
-                        </label>
-                        <input
-                          id="product"
-                          placeholder="Product name"
-                          className="..."
-                          name="productName"
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <fieldset className="mb-6">
-                        <legend className="text-sm font-medium mb-2">
-                          How do you feel about this product?
-                        </legend>
-                        <div className="flex flex-col space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="very-satisfied"
-                              className="..."
-                              name="satisfaction"
-                              value="very-satisfied"
-                              onChange={handleInputChange}
-                            />
-                            <label className="text-sm" htmlFor="very-satisfied">
-                              Very Satisfied
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="somewhat-satisfied"
-                              className="..."
-                              name="satisfaction"
-                              value="very-satisfied"
-                              onChange={handleInputChange}
-                            />
-                            <label className="text-sm" htmlFor="very-satisfied">
-                              Somewhat Satisfied
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="neutral-satisfied"
-                              className="..."
-                              name="satisfaction"
-                              value="very-satisfied"
-                              onChange={handleInputChange}
-                            />
-                            <label className="text-sm" htmlFor="very-satisfied">
-                              Neither Satisfied nor Dissatisfied
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="somewhat-dissatisfied"
-                              className="..."
-                              name="satisfaction"
-                              value="very-dissatisfied"
-                              onChange={handleInputChange}
-                            />
-                            <label className="text-sm" htmlFor="very-satisfied">
-                              Somewhat Dissatisfied
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="very-dissatisfied"
-                              className="..."
-                              name="satisfaction"
-                              value="very-dissatisfied"
-                              onChange={handleInputChange}
-                            />
-                            <label className="text-sm" htmlFor="very-satisfied">
-                              Very Dissatisfied
-                            </label>
-                          </div>
-                        </div>
-                      </fieldset>
-                      <fieldset className="mb-6">
-                        <legend className="text-sm font-medium mb-2">
-                          Have you been using this product for at least 7 days?
-                          *
-                        </legend>
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="yes"
-                              name="duration"
-                              value="yes"
-                              className="..."
-                              onChange={handleInputChange}
-                            />
-                            <label htmlFor="yes">Yes</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id="no"
-                              name="duration"
-                              value="no"
-                              className="..."
-                              onChange={handleInputChange}
-                            />
-                            <label htmlFor="no">No</label>
-                          </div>
-                        </div>
-                      </fieldset>
-                      <button
-                        type="button"
-                        disabled={loading}
-                        onClick={handleNextStep}
-                        className="p-4 rounded-lg border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full bg-black text-white"
-                      >
-                        Continue
-                      </button>
-                    </form>
-                  )}
-                  {step === 2 && (
-                    <form onSubmit={handleNextStep}>
-                      <h2 className="text-2xl font-semibold my-5 uppercase">
-                        Please enter your information with amazon order number.
-                      </h2>
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                          <label
-                            htmlFor="first-name"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            First Name *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="first-name"
-                            placeholder="First Name"
-                            name="firstName"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="last-name"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            Last Name *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="last-name"
-                            placeholder="Last Name"
-                            name="lastName"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="order-id"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            Amazon Order ID *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="order-id"
-                            placeholder="Order ID"
-                            name="orderId"
-                            onChange={handleInputChange}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="email"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            Email Address *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="email"
-                            placeholder="Email Address"
-                            name="email"
-                            onChange={handleInputChange}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="street"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            Street Address *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="street"
-                            placeholder="Street Address"
-                            name="address"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="city"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            City *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="city"
-                            placeholder="City"
-                            name="city"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="zip"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            ZIP Code *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="zip"
-                            placeholder="ZIP Code"
-                            name="zip"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="state"
-                            className="block text-sm font-medium mb-2"
-                          >
-                            State *
-                          </label>
-                          <input
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            id="state"
-                            placeholder="State"
-                            name="state"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <fieldset>
-                            <legend className="text-sm font-medium mb-2">
-                              Please send me special offers
-                            </legend>
-                            <div className="flex items-center space-x-4">
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="radio"
-                                  id="yes"
-                                  name="newsletter"
-                                  value="yes"
-                                  className="..."
-                                  onChange={handleInputChange}
-                                />
-                                <label htmlFor="yes">Yes</label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="radio"
-                                  id="no"
-                                  name="newsletter"
-                                  value="no"
-                                  className="..."
-                                  onChange={handleInputChange}
-                                />
-                                <label htmlFor="no">No</label>
-                              </div>
-                            </div>
-                          </fieldset>
-                        </div>
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="p-4 rounded-lg border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full bg-black text-white"
-                      >
-                        Continue
-                      </button>
-                    </form>
-                  )}
-                  {step === 3 && (
-                    <>
-                      {formData.satisfaction === "very-satisfied" && (
-                        <form onSubmit={handleSubmit}>
-                          <div className="max-w-2xl mx-auto p-8">
-                            <h1 className="text-3xl font-bold text-center mb-4">
-                              PLEASE SHARE YOUR EXPERIENCE!
-                            </h1>
-                            <p className="text-lg text-center mb-4">
-                              We would love to earn your product feedback! You
-                              can copy your review below and share your product
-                              experience on Amazon. It would really help our
-                              small business. Thank you!
-                            </p>
-                            <div className="flex justify-center my-6">
-                              <img
-                                alt="Amazon logo"
-                                className="h-20"
-                                height="80"
-                                src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-                                style={{
-                                  aspectRatio: "240/80",
-                                  objectFit: "contain",
-                                }}
-                                width="240"
-                              />
-                            </div>
-                            <div className="flex justify-center mb-6">
-                              <StarIcon className="text-yellow-400 w-8 h-8" />
-                              <StarIcon className="text-yellow-400 w-8 h-8" />
-                              <StarIcon className="text-yellow-400 w-8 h-8" />
-                              <StarIcon className="text-yellow-400 w-8 h-8" />
-                              <StarIcon className="text-yellow-400 w-8 h-8" />
-                            </div>
-                            <label
-                              className="block text-lg font-medium mb-2"
-                              htmlFor="review-comments"
-                            >
-                              Review / Comments (Minimum 150 characters to be
-                              eligible for your free item) *
-                            </label>
-                            <textarea
-                              className="flex min-h-[80px] border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full p-4 border rounded-md mb-6"
-                              id="review-comments"
-                              placeholder="Type your review here."
-                              name="reviews"
-                              onChange={handleInputChange}
-                            />
-                            <a
-                              href={`https://www.amazon.com/review/create-review?asin=${asin}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 bg-blue-600 text-white py-3 px-6 rounded-md mb-4"
-                            >
-                              CLICK TO POST A REVIEW ON AMAZON
-                            </a>
-                            <button
-                              type="submit"
-                              disabled={loading}
-                              className="mt-10 inline-flex items-center justify-center w-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 bg-black text-white py-3 px-6 rounded-md"
-                            >
-                              SUBMIT AND GET YOUR FREE ITEM!
-                            </button>
-                          </div>
-                        </form>
-                      )}
-                      {formData.satisfaction === "very-dissatisfied" && (
-                        <form onSubmit={handleSubmit}>
-                          <div className="max-w-2xl mx-auto p-8">
-                            <h1 className="text-3xl font-bold text-center mb-4">
-                              PLEASE SHARE YOUR EXPERIENCE!
-                            </h1>
-
-                            <label
-                              className="block text-lg font-medium mb-2"
-                              htmlFor="review-comments"
-                            >
-                              Review / Comments (Minimum 150 characters to be
-                              eligible for your free item) *
-                            </label>
-                            <textarea
-                              className="flex min-h-[80px] border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full p-4 border rounded-md mb-6"
-                              id="review-comments"
-                              placeholder="Type your review here."
-                              name="reviews"
-                              onChange={handleInputChange}
-                            />
-
-                            <button
-                              type="submit"
-                              disabled={loading}
-                              className="mt-10 inline-flex items-center justify-center w-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 bg-black text-white py-3 px-6 rounded-md"
-                            >
-                              SUBMIT AND GET YOUR FREE ITEM!
-                            </button>
-                          </div>
-                        </form>
-                      )}
-                    </>
-                  )}
-                  {step === 4 && (
-                    <>
-                      <div className="max-w-2xl mx-auto my-10 p-6">
-                        <h1 className="text-4xl font-bold text-center mb-6">
-                          THANK YOU!
-                        </h1>
-                        <p className="text-lg text-center mb-4">
-                          We value your time and appreciate your business. One
-                          of our customer support representatives will reach out
-                          to you soon. Enjoy your free item!
-                        </p>
-                        <p className="text-sm text-center">
-                          *Limit one free item per household or customer. Offer
-                          only valid with full-priced purchases. Proof of
-                          purchase from an authorized retailer required. No
-                          additional purchase is necessary. Our offer is not
-                          dependent on the quality of feedback that you provide.
-                          Offer only valid within the United States. Void where
-                          prohibited. Offer only valid while supplies last.
-                          Subject to change or cancellation at any time.
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </>
-              </CSSTransition>
-            </SwitchTransition>
+            <div className="w-full md:w-3/5 lg:w-7/10 xl:w-3/5 box-content">
+              <img
+                src={"firstpage.jpg"}
+                alt="Your description"
+                className="w-full min-h-screen/2 md:min-h-screen object-cover"
+              />
+            </div>
           </div>
-        </>
-      )}
-    </>
-  );
-}
+        )}
 
-export default Form;
+        {step === 2 && (
+          <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
+            <div className="w-full md:w-[40%] p-5 flex flex-col items-center md:justify-center md:min-h-screen box-content">
+              <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
+                <div>
+                  <form>
+                    <label className="block mt-4 max-w-[600px]">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
+                        {t("name")}
+                      </span>
+
+                      <input
+                        id="myInput"
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        required
+                        placeholder={`"John"`}
+                        onChange={handleChange}
+                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      />
+                      {errors.name && (
+                        <div className="text-red-500">{errors.name}</div>
+                      )}
+                    </label>
+                    <label className="block mb-5 max-w-[600px] mt-10">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
+                        {t("email")}
+                      </span>
+                      <br></br>
+                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
+                        {t("emailPara")}
+                      </span>
+
+                      <input
+                        id="myInput"
+                        type="text"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder={`"john@email.com"`}
+                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      />
+
+                      {errors.email && (
+                        <div className="text-red-500">{errors.email}</div>
+                      )}
+                    </label>
+                  </form>
+                </div>
+              </div>
+
+              <div className="mt-10 md:mt-32">
+                {step > 1 && (
+                  <button
+                    className="bg-myOrange hover:bg-red-700 text-white font-bold py-3 px-4 text-2xl rounded"
+                    onClick={prevStep}
+                  >
+                    Back
+                  </button>
+                )}
+                {step < 4 && (
+                  <button
+                    className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
+                    onClick={nextStep}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="w-full md:w-3/5 flex">
+              <img
+                src={"secondpage.png"}
+                alt="Your description"
+                className="w-full h-screen/2 md:h-screen object-cover bg-blueInput"
+              />
+            </div>
+          </div>
+        )}
+        {step === 3 && (
+          <div className="flex flex-col md:flex-row md:items-center">
+            <div className="w-full md:w-2/5 p-5 flex flex-col items-center justify-center md:min-h-screen box-content">
+              <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
+                <div className="">
+                  <form>
+                    <label className="block mt-4 max-w-[600px]">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
+                        {t("setQues")}
+                      </span>
+
+                      <select
+                        id="myInput"
+                        name="set"
+                        value={formData.set}
+                        onChange={handleChange}
+                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      >
+                        <option value="">{t("levelOption")}</option>
+                        <option value="spanish multi set">
+                          Spanish Multi SET
+                        </option>
+                        <option value="spanish/eng noun set">
+                          Spanish/English Nouns SET
+                        </option>
+                        <option disabled>Coming Soon!</option>
+                      </select>
+                      {errors.set && (
+                        <div className="text-red-500">{errors.set}</div>
+                      )}
+                    </label>
+                    <label className="block mb-5 max-w-[600px] mt-10">
+                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
+                        {t("orderQues")}
+                      </span>
+                      <br></br>
+                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
+                        {t("orderPara")}
+                      </span>
+
+                      <input
+                        id="myInput"
+                        type="text"
+                        name="orderId"
+                        value={formData.orderId}
+                        onChange={handleChange}
+                        placeholder={`"701-0951950-9026651"`}
+                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                      />
+
+                      {errors.orderId && (
+                        <div className="text-red-500">{errors.orderId}</div>
+                      )}
+                    </label>
+                  </form>
+                </div>
+              </div>
+              <div className="mt-10 md:mt-32">
+                {step > 1 && (
+                  <button
+                    className="bg-myOrange hover:bg-red-700 text-white font-bold py-3 px-4 text-2xl rounded"
+                    onClick={prevStep}
+                  >
+                    Back
+                  </button>
+                )}
+
+                {step === 3 && (
+                  <button
+                    className="bg-green-500 hover:bg-green-700 text-white text-2xl font-bold py-3 px-4 rounded "
+                    onClick={handleSubmit}
+                    disabled={loading}
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="w-full md:w-3/5 py-5 min-h-screen flex flex-col justify-center pr-5">
+              <h1 className="font-bold text-xl md:text-3xl mb-5">
+                {t("findOrder")}{" "}
+                <button
+                  onClick={() => setActiveTab("mobile")}
+                  className={`px-2 rounded-l py-3 text-white bg-myOrange ${
+                    activeTab === "mobile"
+                      ? "shadow-inner shadow-black"
+                      : "shadow-lg "
+                  }`}
+                >
+                  Mobile
+                </button>
+                <button
+                  onClick={() => setActiveTab("desktop")}
+                  className={`px-2 rounded-r py-3 text-white bg-blueInput ${
+                    activeTab === "desktop"
+                      ? "shadow-inner shadow-black"
+                      : "shadow-lg"
+                  }`}
+                >
+                  Desktop
+                </button>
+              </h1>
+              {activeTab === "mobile" && (
+                <div className="flex">
+                  <div className="flex items-center ">
+                    <ol className="flex flex-col gap-7 text-lg md:text-2xl">
+                      <li
+                        onMouseEnter={() =>
+                          setDisplayedImage("amazonMobile.png")
+                        }
+                        className="leading-10"
+                      >
+                        <Trans
+                          i18nKey="step1"
+                          components={{
+                            1: (
+                              <span className="bg-blueInput p-3 rounded-r-full" />
+                            ),
+                          }}
+                        />
+                      </li>
+                      <li
+                        onMouseEnter={() => setDisplayedImage("your_order.png")}
+                        className="leading-10"
+                      >
+                        <Trans
+                          i18nKey="step2"
+                          components={{
+                            1: (
+                              <span className="bg-blueInput p-3 rounded-r-full" />
+                            ),
+                          }}
+                        />
+                      </li>
+                      <li
+                        onMouseEnter={() => setDisplayedImage("find_order.png")}
+                        className="leading-10"
+                      >
+                        <Trans
+                          i18nKey="step3"
+                          components={{
+                            1: (
+                              <span className="bg-blueInput p-3 rounded-r-full" />
+                            ),
+                          }}
+                        />
+                      </li>
+                      <li
+                        onMouseEnter={() =>
+                          setDisplayedImage("order_details.png")
+                        }
+                        className="leading-10"
+                      >
+                        <Trans
+                          i18nKey="step4"
+                          components={{
+                            1: (
+                              <span className="bg-blueInput p-3 rounded-r-full" />
+                            ),
+                          }}
+                        />
+                      </li>
+                      <li
+                        onMouseEnter={() => setDisplayedImage("order_id.png")}
+                        className="leading-10"
+                      >
+                        <Trans
+                          i18nKey="step5"
+                          components={{
+                            1: (
+                              <span className="bg-blueInput p-3 rounded-r-full" />
+                            ),
+                          }}
+                        />
+                      </li>
+                    </ol>
+                  </div>
+                  <div className="border-4">
+                    <img
+                      src={displayedImage}
+                      alt="ss"
+                      className="w-80 object-cover"
+                    />
+                  </div>
+                </div>
+              )}
+              {activeTab === "desktop" && (
+                <div>
+                  <ol className="flex flex-col gap-7 text-2xl">
+                    <li className="leading-10">
+                      <Trans
+                        i18nKey="step1"
+                        components={{
+                          1: (
+                            <span className="bg-blueInput p-3 rounded-r-full" />
+                          ),
+                        }}
+                      />
+                    </li>
+                    <li className="leading-10">
+                      <Trans
+                        i18nKey="step2"
+                        components={{
+                          1: (
+                            <span className="bg-blueInput p-3 rounded-r-full" />
+                          ),
+                        }}
+                      />
+                    </li>
+                    <li className="leading-10">
+                      <Trans
+                        i18nKey="step3"
+                        components={{
+                          1: (
+                            <span className="bg-blueInput p-3 rounded-r-full" />
+                          ),
+                        }}
+                      />
+                    </li>
+                    <li className="leading-10">
+                      <Trans
+                        i18nKey="step4"
+                        components={{
+                          1: (
+                            <span className="bg-blueInput p-3 rounded-r-full" />
+                          ),
+                        }}
+                      />
+                    </li>
+                    <li className="leading-10">
+                      <Trans
+                        i18nKey="step5"
+                        components={{
+                          1: (
+                            <span className="bg-blueInput p-3 rounded-r-full" />
+                          ),
+                        }}
+                      />
+                    </li>
+                  </ol>
+                  <div className="flex flex-col lg:flex-row mt-5">
+                    <img
+                      src={"amazonDesktop1.png"}
+                      alt=""
+                      className="max-w-[500px]"
+                    />
+                    <img
+                      src={"amazonDesktop2.png"}
+                      alt=""
+                      className="max-w-[500px]"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {step === 4 && (
+          <div className="flex flex-col items-center justify-center h-screen gap-5 lg:gap-10 max-w-[800px] mx-auto">
+            <h1 className="text-6xl text-center font-rasputin">
+              {t("thankYou")}
+              <br></br>
+              <span className="uppercase">{formData.name}!</span>
+            </h1>
+
+            <p className="text-3xl text-center font-light">{t("thankYouP1")}</p>
+
+            <p className="text-3xl text-center font-light">{t("thankYouP2")}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
