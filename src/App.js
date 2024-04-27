@@ -543,8 +543,8 @@ const App = () => {
                 </button>
               </h1>
               {activeTab === "mobile" && (
-                <div className="flex">
-                  <div className="flex items-center ">
+                <div className="flex items-start">
+                  <div className="flex items-center w-1/2 mr-2">
                     <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
                       <li
                         onMouseEnter={() =>
@@ -617,17 +617,17 @@ const App = () => {
                       </li>
                     </ol>
                   </div>
-                  <div className="border-4">
+                  <div className="w-1/2">
                     <img
                       src={displayedImage}
                       alt="ss"
-                      className="w-80 object-cover"
+                      className="w-full max-w-[300px] object-fill"
                     />
                   </div>
                 </div>
               )}
               {activeTab === "desktop" && (
-                <div>
+                <div className="flex flex-col items-center 2xl:items-start p-2">
                   <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
                     <li className="leading-10">
                       <Trans
@@ -680,17 +680,9 @@ const App = () => {
                       />
                     </li>
                   </ol>
-                  <div className="flex flex-col xl:flex-row mt-5">
-                    <img
-                      src={"amazonDesktop1.png"}
-                      alt=""
-                      className="max-w-[500px]"
-                    />
-                    <img
-                      src={"amazonDesktop2.jpeg"}
-                      alt=""
-                      className="max-w-[500px]"
-                    />
+                  <div className="flex flex-col gap-2 2xl:flex-row mt-5 max-w-[450px]">
+                    <img src={"amazonDesktop1.png"} alt="" className="" />
+                    <img src={"amazonDesktop2.jpeg"} alt="" className="" />
                   </div>
                 </div>
               )}
