@@ -237,7 +237,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen items-center bg-blueBG w-full text-blueText">
+    <div className="min-h-screen items-center bg-blueBG w-full text-blueText overflow-x-hidden">
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -276,8 +276,8 @@ const App = () => {
                     className="border-2 
                     bg-myOrange text-white p-2 rounded-md"
                   >
-                    <option value="en">En</option>
-                    <option value="es">Es</option>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
                   </select>
                 </div>
                 <span className="font-rasputin text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
@@ -442,7 +442,7 @@ const App = () => {
         )}
         {step === 3 && (
           <div className="flex flex-col md:flex-row md:items-center">
-            <div className="w-full md:w-2/5 p-5 flex flex-col items-center justify-center md:min-h-screen box-content">
+            <div className="w-full md:w-2/5 md:p-5 flex flex-col items-center justify-center md:min-h-screen box-content">
               <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
                 <div className="">
                   <form>
@@ -519,7 +519,7 @@ const App = () => {
               </div>
             </div>
             <div className="w-full md:w-3/5 py-5 min-h-screen flex flex-col justify-center pr-5">
-              <h1 className="font-bold text-xl md:text-3xl mb-5">
+              <h1 className="font-bold text-lg lg:text-xl xl:text-2xl mb-5">
                 {t("findOrder")}{" "}
                 <button
                   onClick={() => setActiveTab("mobile")}
@@ -545,7 +545,7 @@ const App = () => {
               {activeTab === "mobile" && (
                 <div className="flex">
                   <div className="flex items-center ">
-                    <ol className="flex flex-col gap-7 text-lg md:text-2xl">
+                    <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
                       <li
                         onMouseEnter={() =>
                           setDisplayedImage("amazonMobile.png")
@@ -628,7 +628,7 @@ const App = () => {
               )}
               {activeTab === "desktop" && (
                 <div>
-                  <ol className="flex flex-col gap-7 text-2xl">
+                  <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
                     <li className="leading-10">
                       <Trans
                         i18nKey="step1"
@@ -680,14 +680,14 @@ const App = () => {
                       />
                     </li>
                   </ol>
-                  <div className="flex flex-col lg:flex-row mt-5">
+                  <div className="flex flex-col xl:flex-row mt-5">
                     <img
                       src={"amazonDesktop1.png"}
                       alt=""
                       className="max-w-[500px]"
                     />
                     <img
-                      src={"amazonDesktop2.png"}
+                      src={"amazonDesktop2.jpeg"}
                       alt=""
                       className="max-w-[500px]"
                     />
