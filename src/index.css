@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel.carousel-slider {
+  padding-bottom: 70px; /* Adjust as needed */
+}
+
+.carousel.carousel-slider .control-dots {
+  position: absolute;
+  bottom: 40px; /* Adjust as needed */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel.carousel-slider button[title="previous slide / item"],
+.carousel.carousel-slider button[title="next slide / item"] {
+  position: absolute;
+  bottom: 0px; /* Adjust as needed */
+  left: 50%;
+}
+
+.carousel.carousel-slider button[title="previous slide / item"] {
+  transform: translateX(-150%);
+}
+
+.carousel.carousel-slider button[title="next slide / item"] {
+  transform: translateX(50%);
+}
+
+.carousel .control-prev {
+  left: 50%;
+}

@@ -3,6 +3,9 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import i18n from "i18next";
 import { Trans, initReactI18next, useTranslation } from "react-i18next";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -22,7 +25,8 @@ i18n.use(initReactI18next).init({
         emailPara:
           "We will use it to send you, your E- PRACTICE BOOKLET, Promo codes, and new innovative Learning tips",
         orderQues: "What is your order ID?",
-        orderPara: "Here is the steps to how you can find your order ID --->",
+        orderPara:
+          "Here is the steps to how you can find your order ID swipe arrow to see steps screenshots --->",
         setQues: "Which study key set are you learning with?",
         thankYou: "Thank you",
         thankYouP1:
@@ -36,6 +40,9 @@ i18n.use(initReactI18next).init({
         step3: "<1>Step 3</1> Find your order and click on it ",
         step4: "<1>Step 4</1> scroll down Click 'View Order details'.",
         step5: "<1>Step 5</1> You will see your order ID.",
+        beginner: "Beginner",
+        intermediate: "Intermediate",
+        advanced: "Advanced",
       },
     },
     es: {
@@ -65,13 +72,16 @@ i18n.use(initReactI18next).init({
           "Mientras tanto, la práctica hace al maestro. Usa tus nuevas tarjetas educativas de Study Key al máximo y ¡estate atento a nuestro correo electrónico!",
         findOrder: "Cómo encontrar su ID de pedido",
         step1:
-          "<1>Paso 1</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
+          "<1>Paso 1 :</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
         step2:
-          "<1>Paso 2</1> bajo el nombre de tu cuenta haz clic en “tus pedidos”.",
+          "<1>Paso 2 :</1> bajo el nombre de tu cuenta haz clic en “tus pedidos”.",
         step3: "<1>Paso 3</1> Encuentra tu pedido y haz clic en él.",
         step4:
           "<1>Paso 4</1> desplázate hacia abajo y haz clic en “Ver detalles del pedido.",
         step5: "<1>Paso 5</1> Verás tu ID de pedido.",
+        beginner: "Principiante",
+        intermediate: "Intermedio",
+        advanced: "Avanzado",
       },
     },
     // Add more languages here
@@ -92,7 +102,6 @@ const App = () => {
     set: "",
   });
   const [activeTab, setActiveTab] = useState("mobile");
-  const [displayedImage, setDisplayedImage] = useState("amazonMobile.png");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -328,9 +337,11 @@ const App = () => {
                         className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
                       >
                         <option value="">{t("levelOption")}</option>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
+                        <option value="Beginner">{t("beginner")}</option>
+                        <option value="Intermediate">
+                          {t("intermediate")}
+                        </option>
+                        <option value="Advanced">{t("advanced")}</option>
                       </select>
                       {errors.level && (
                         <div className="text-red-500">{errors.level}</div>
@@ -441,7 +452,7 @@ const App = () => {
           </div>
         )}
         {step === 3 && (
-          <div className="flex flex-col md:flex-row md:items-center">
+          <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/5 md:p-5 flex flex-col items-center justify-center md:min-h-screen box-content">
               <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
                 <div className="">
@@ -518,12 +529,12 @@ const App = () => {
                 )}
               </div>
             </div>
-            <div className="w-full md:w-3/5 py-5 min-h-screen flex flex-col justify-center pr-5">
-              <h1 className="font-bold text-lg lg:text-xl xl:text-2xl mb-5">
+            <div className="w-full md:w-3/5 lg:w-3/5 max-w-[600px] py-5 flex flex-col p-3 mx-auto md:min-h-screen box-content justify-center">
+              <h1 className="font-bold text-lg md:text-2xl mb-5">
                 {t("findOrder")}{" "}
                 <button
                   onClick={() => setActiveTab("mobile")}
-                  className={`px-2 rounded-l py-3 text-white bg-myOrange ${
+                  className={`px-2 rounded-l py-3 text-white text-xl bg-myOrange ${
                     activeTab === "mobile"
                       ? "shadow-inner shadow-black"
                       : "shadow-lg "
@@ -533,7 +544,7 @@ const App = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("desktop")}
-                  className={`px-2 rounded-r py-3 text-white bg-blueInput ${
+                  className={`px-2 rounded-r py-3 text-white text-xl bg-blueInput ${
                     activeTab === "desktop"
                       ? "shadow-inner shadow-black"
                       : "shadow-lg"
@@ -543,147 +554,195 @@ const App = () => {
                 </button>
               </h1>
               {activeTab === "mobile" && (
-                <div className="flex items-start">
-                  <div className="flex items-center w-1/2 mr-2">
-                    <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
-                      <li
-                        onMouseEnter={() =>
-                          setDisplayedImage("amazonMobile.png")
-                        }
-                        className="leading-10"
-                      >
+                <div className="carousel-wrapper relative aspect-video w-full pb-10">
+                  <Carousel
+                    autoPlay={true}
+                    showArrows={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    className="w-full h-full"
+                    renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                      hasPrev && (
+                        <button
+                          type="button"
+                          onClick={onClickHandler}
+                          title={label}
+                          style={{
+                            backgroundColor: "blueInput",
+                            position: "absolute",
+                            bottom: 10, // Position at the bottom
+                            left: "50%", // Center horizontally
+                            transform: "translateX(-100%)", // Adjust for button width
+                            zIndex: 9999,
+                          }}
+                        >
+                          <FaArrowLeft className="text-blueInput text-xl" />
+                        </button>
+                      )
+                    }
+                    renderArrowNext={(onClickHandler, hasNext, label) =>
+                      hasNext && (
+                        <button
+                          type="button"
+                          onClick={onClickHandler}
+                          title={label}
+                          style={{
+                            backgroundColor: "blueInput",
+                            position: "absolute",
+                            bottom: 10, // Position at the bottom
+                            left: "50%", // Center horizontally
+                            transform: "translateX(0%)", // Adjust for button width
+                            zIndex: 9999,
+                          }}
+                        >
+                          <FaArrowRight className="text-blueInput text-xl" />
+                        </button>
+                      )
+                    }
+                  >
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
                         <Trans
                           i18nKey="step1"
                           components={{
-                            1: (
-                              <span className="bg-blueInput p-3 rounded-r-full" />
-                            ),
+                            1: <span className="text-blueInput" />,
                           }}
                         />
-                      </li>
-                      <li
-                        onMouseEnter={() => setDisplayedImage("your_order.png")}
-                        className="leading-10"
-                      >
+                      </h2>
+                      <img
+                        src={"amazonMobile.png"}
+                        alt="Step 1"
+                        className="object-contain max-h-full mx-auto max-w-[50%]"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
                         <Trans
                           i18nKey="step2"
                           components={{
-                            1: (
-                              <span className="bg-blueInput p-3 rounded-r-full" />
-                            ),
+                            1: <span className="text-blueInput " />,
                           }}
                         />
-                      </li>
-                      <li
-                        onMouseEnter={() => setDisplayedImage("find_order.png")}
-                        className="leading-10"
-                      >
+                      </h2>
+                      <img
+                        src={"your_order.png"}
+                        alt="Step 2"
+                        className="object-contain max-h-full mx-auto max-w-[50%]"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
                         <Trans
                           i18nKey="step3"
                           components={{
-                            1: (
-                              <span className="bg-blueInput p-3 rounded-r-full" />
-                            ),
+                            1: <span className="text-blueInput " />,
                           }}
                         />
-                      </li>
-                      <li
-                        onMouseEnter={() =>
-                          setDisplayedImage("order_details.png")
-                        }
-                        className="leading-10"
-                      >
+                      </h2>
+                      <img
+                        src={"find_order.png"}
+                        alt="Step 3"
+                        className="object-contain max-h-full mx-auto max-w-[50%]"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
                         <Trans
                           i18nKey="step4"
                           components={{
-                            1: (
-                              <span className="bg-blueInput p-3 rounded-r-full" />
-                            ),
+                            1: <span className="text-blueInput " />,
                           }}
                         />
-                      </li>
-                      <li
-                        onMouseEnter={() => setDisplayedImage("order_id.png")}
-                        className="leading-10"
-                      >
+                      </h2>
+                      <img
+                        src={"order_details.png"}
+                        alt="Step 4"
+                        className="object-contain max-h-full mx-auto max-w-[50%]"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
                         <Trans
                           i18nKey="step5"
                           components={{
-                            1: (
-                              <span className="bg-blueInput p-3 rounded-r-full" />
-                            ),
+                            1: <span className="text-blueInput " />,
                           }}
                         />
-                      </li>
-                    </ol>
-                  </div>
-                  <div className="w-1/2">
-                    <img
-                      src={displayedImage}
-                      alt="ss"
-                      className="w-full max-w-[300px] object-fill"
-                    />
-                  </div>
+                      </h2>
+                      <img
+                        src={"order_id.png"}
+                        alt="Step 5"
+                        className="object-contain max-h-full mx-auto max-w-[50%]"
+                      />
+                    </div>
+                  </Carousel>
                 </div>
               )}
               {activeTab === "desktop" && (
-                <div className="flex flex-col items-center 2xl:items-start p-2">
-                  <ol className="flex flex-col gap-7 text-lg xl:text-2xl">
-                    <li className="leading-10">
-                      <Trans
-                        i18nKey="step1"
-                        components={{
-                          1: (
-                            <span className="bg-blueInput p-3 rounded-r-full" />
-                          ),
-                        }}
+                <div className="carousel-wrapper relative aspect-video w-full">
+                  <Carousel
+                    autoPlay={true}
+                    showArrows={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    className="w-full h-full"
+                    renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                      hasPrev && (
+                        <button
+                          type="button"
+                          onClick={onClickHandler}
+                          title={label}
+                        >
+                          <FaArrowLeft className="text-blueInput text-xl" />
+                        </button>
+                      )
+                    }
+                    renderArrowNext={(onClickHandler, hasNext, label) =>
+                      hasNext && (
+                        <button
+                          type="button"
+                          onClick={onClickHandler}
+                          title={label}
+                        >
+                          <FaArrowRight className="text-blueInput text-xl" />
+                        </button>
+                      )
+                    }
+                  >
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
+                        <Trans
+                          i18nKey="step1"
+                          components={{
+                            1: <span className="text-blueInput" />,
+                          }}
+                        />
+                      </h2>
+                      <img
+                        src={"amazonDesktop1.png"}
+                        alt="Step 1"
+                        className="object-contain max-h-full mx-auto "
                       />
-                    </li>
-                    <li className="leading-10">
-                      <Trans
-                        i18nKey="step2"
-                        components={{
-                          1: (
-                            <span className="bg-blueInput p-3 rounded-r-full" />
-                          ),
-                        }}
+                    </div>
+                    <div className="flex flex-col items-center bg-blueBG h-full">
+                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
+                        <Trans
+                          i18nKey="step2"
+                          components={{
+                            1: <span className="text-blueInput " />,
+                          }}
+                        />
+                      </h2>
+                      <img
+                        src={"amazonDesktop2.jpeg"}
+                        alt="Step 2"
+                        className="object-contain max-h-full mx-auto"
                       />
-                    </li>
-                    <li className="leading-10">
-                      <Trans
-                        i18nKey="step3"
-                        components={{
-                          1: (
-                            <span className="bg-blueInput p-3 rounded-r-full" />
-                          ),
-                        }}
-                      />
-                    </li>
-                    <li className="leading-10">
-                      <Trans
-                        i18nKey="step4"
-                        components={{
-                          1: (
-                            <span className="bg-blueInput p-3 rounded-r-full" />
-                          ),
-                        }}
-                      />
-                    </li>
-                    <li className="leading-10">
-                      <Trans
-                        i18nKey="step5"
-                        components={{
-                          1: (
-                            <span className="bg-blueInput p-3 rounded-r-full" />
-                          ),
-                        }}
-                      />
-                    </li>
-                  </ol>
-                  <div className="flex flex-col gap-2 2xl:flex-row mt-5 max-w-[450px]">
-                    <img src={"amazonDesktop1.png"} alt="" className="" />
-                    <img src={"amazonDesktop2.jpeg"} alt="" className="" />
-                  </div>
+                    </div>
+                    {/* Add more steps as needed */}
+                  </Carousel>
                 </div>
               )}
             </div>
