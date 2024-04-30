@@ -43,6 +43,8 @@ i18n.use(initReactI18next).init({
         beginner: "Beginner",
         intermediate: "Intermediate",
         advanced: "Advanced",
+        english: "English",
+        spanish: "Spanish",
       },
     },
     es: {
@@ -82,6 +84,8 @@ i18n.use(initReactI18next).init({
         beginner: "Principiante",
         intermediate: "Intermedio",
         advanced: "Avanzado",
+        english: "Inglés",
+        spanish: "Español",
       },
     },
     // Add more languages here
@@ -285,8 +289,8 @@ const App = () => {
                     className="border-2 
                     bg-myOrange text-white p-2 rounded-md"
                   >
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
+                    <option value="en">{t("english")}</option>
+                    <option value="es">{t("spanish")}</option>
                   </select>
                 </div>
                 <span className="font-rasputin text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
@@ -314,8 +318,8 @@ const App = () => {
                         className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
                       >
                         <option value="">{t("langOption")}</option>
-                        <option value="English">English</option>
-                        <option value="Spanish">Spanish</option>
+                        <option value="English">{t("english")}</option>
+                        <option value="Spanish">{t("spanish")}</option>
                       </select>
                       {errors.language && (
                         <div className="text-red-500">{errors.language}</div>
@@ -529,7 +533,7 @@ const App = () => {
                 )}
               </div>
             </div>
-            <div className="w-full md:w-3/5 lg:w-3/5 max-w-[600px] py-5 flex flex-col p-3 mx-auto md:min-h-screen box-content justify-center">
+            <div className="w-full md:w-3/5 lg:w-3/5 max-w-[400px] py-5 flex flex-col p-3 mx-auto md:min-h-screen box-content justify-center">
               <h1 className="font-bold text-lg md:text-2xl mb-5">
                 {t("findOrder")}{" "}
                 <button
