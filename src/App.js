@@ -218,13 +218,16 @@ const App = () => {
     // If all checks pass, proceed to the next step
     if (!newErrors.set && !newErrors.orderId) {
       const validateOrderPromise = axios.post(
-        "http://localhost:5000/validate-order-id",
+        "https://studykey-riddles-server.vercel.app/validate-order-id",
         { orderId: formData.orderId }
       );
 
       const submitReviewPromise = validateOrderPromise.then((response) => {
         if (response.status === 200) {
-          return axios.post("http://localhost:5000/submit-review", formData);
+          return axios.post(
+            "https://studykey-riddles-server.vercel.app/submit-review",
+            formData
+          );
         } else {
           throw new Error("Order validation failed");
         }
