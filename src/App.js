@@ -218,34 +218,51 @@ const App = () => {
     // If all checks pass, proceed to the next step
     if (!newErrors.set && !newErrors.orderId) {
       const validateOrderPromise = axios.post(
-        "https://studykey-riddles-server.vercel.app/validate-order-id",
+        "http://localhost:5000/validate-order-id",
         { orderId: formData.orderId }
       );
 
-      toast.promise(validateOrderPromise, {
-        loading: "Validating order...",
-        success: "Order validated",
-        error:
-          "Order ID does not match. Please make sure to put the correct Amazon order number.",
+      const submitReviewPromise = validateOrderPromise.then((response) => {
+        if (response.status === 200) {
+          return axios.post("http://localhost:5000/submit-review", formData);
+        } else {
+          throw new Error("Order validation failed");
+        }
       });
 
-      try {
-        const response = await validateOrderPromise;
-        if (response.status === 200) {
-          try {
-            const response = await axios.post(
-              "https://studykey-riddles-server.vercel.app/submit-review",
-              formData
-            );
-            if (response.status === 200) {
-              setStep(step + 1);
+      const wrappedPromise = new Promise((resolve, reject) => {
+        submitReviewPromise
+          .then((data) => {
+            setStep(step + 1);
+            resolve(data);
+          })
+          .catch((error) => {
+            if (error.response) {
+              if (error.response.status === 409) {
+                // Duplicate order ID error
+                toast.error(error.response.data.message);
+              } else if (error.response.status === 400) {
+                // Invalid order ID error
+                toast.error(
+                  "Order ID doesn't match. Please make sure to put the correct Amazon order ID!"
+                );
+              } else {
+                // Other errors
+                console.error(error);
+              }
+            } else {
+              // Network error or other error occurred without a response
+              console.error(error);
             }
-          } catch (error) {}
-        }
-      } catch (error) {
-        setLoading(false);
-        return;
-      }
+            reject(error);
+          });
+      });
+
+      toast.promise(wrappedPromise, {
+        loading: "Please wait",
+        success: "Success",
+        error: "An error occurred while submitting the claim.",
+      });
     }
   };
 
@@ -267,6 +284,13 @@ const App = () => {
           },
 
           // Default options for specific types
+          loading: {
+            duration: Infinity,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
           success: {
             duration: 3000,
             theme: {
