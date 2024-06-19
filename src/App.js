@@ -11,8 +11,8 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        welcome: `"Hola amigo! Welcome to our Language Learning Club! Your purchase of our flashcards shows your dedication to your language learning goals, so we'd like to offer you our exclusive E-Practice booklet to help you accomplish your goal faster! This booklet is tailored to fit any language level and is not available on the market yet! You are the first to get your hands on it.
-        "`,
+        welcome: `Hola amigo! Welcome to our Language Learning Club! Your purchase of our flashcards shows your dedication to your language learning goals, so we'd like to offer you our exclusive E-Practice booklet to help you accomplish your goal faster! This booklet is tailored to fit any language level and is not available on the market yet! You are the first to get your hands on it.
+        `,
         langQues: `What language are you mastering?`,
         langPara: "We will use this to match you with the right lesson plan.",
         langOption: "Select a language",
@@ -30,9 +30,9 @@ i18n.use(initReactI18next).init({
         setQues: "Which study key set are you learning with?",
         thankYou: "Thank you",
         thankYouP1:
-          "Thank you for taking this huge leap towards your learning journey, we will email you, Your FREE E-PRACTICE BOOKET!",
+          "You inspire the new generation to be at their best and taking this huge leap towards your learning journey shows that! We will email you, your FREE E-PRACTICE BOOKLET!",
         thankYouP2:
-          "In the mean time practice makes perfect Use your new study key flashcards to their full potential and watch out for our email!",
+          "In the mean time practice makes perfect visit our website at Studykey.ca to check out our flashcard line.",
         findOrder: "How to find your Order ID",
         step1:
           "<1>Step 1</1> Log in to your Amazon account, at the bottom click icon.",
@@ -49,8 +49,8 @@ i18n.use(initReactI18next).init({
     },
     es: {
       translation: {
-        welcome: `"¡Hello friend! ¡Bienvenido a nuestro Club de Aprendizaje de Idiomas! Tu compra de nuestras tarjetas educativas muestra tu dedicación a tus metas de aprendizaje de idiomas, por lo que nos gustaría ofrecerte nuestro exclusivo cuadernillo electrónico de práctica para ayudarte a alcanzar tu objetivo más rápido. Este cuadernillo está adaptado para cualquier nivel de idioma y aún no está disponible en el mercado. ¡Tú eres el primero en tenerlo en tus manos!
-        "`,
+        welcome: `¡Hello friend! ¡Bienvenido a nuestro Club de Aprendizaje de Idiomas! Tu compra de nuestras tarjetas educativas muestra tu dedicación a tus metas de aprendizaje de idiomas, por lo que nos gustaría ofrecerte nuestro exclusivo cuadernillo electrónico de práctica para ayudarte a alcanzar tu objetivo más rápido. Este cuadernillo está adaptado para cualquier nivel de idioma y aún no está disponible en el mercado. ¡Tú eres el primero en tenerlo en tus manos!
+        `,
         langQues: `¿Qué idioma estás dominando?`,
         langPara:
           "Lo utilizaremos para emparejarte con el plan de lecciones adecuado.",
@@ -68,11 +68,10 @@ i18n.use(initReactI18next).init({
           "Aquí están los pasos sobre cómo puedes encontrar tu ID de pedido --->",
         setQues: "¿Con qué conjunto de Study Key estás aprendiendo?",
         thankYou: "¡Gracias",
-        thankYouP1:
-          "Gracias por dar este gran paso hacia tu viaje de aprendizaje, te enviaremos por correo electrónico ¡Tu CUADERNILLO ELECTRÓNICO DE PRÁCTICA GRATIS!",
+        thankYouP1: `Inspiras a la nueva generación a dar lo mejor de sí misma y ¡este gran paso hacia tu viaje de aprendizaje lo demuestra!
+Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
         thankYouP2:
-          "Mientras tanto, la práctica hace al maestro. Usa tus nuevas tarjetas educativas de Study Key al máximo y ¡estate atento a nuestro correo electrónico!",
-        findOrder: "Cómo encontrar su ID de pedido",
+          "Mientras tanto, la práctica hace al maestro. Visita nuestro sitio web en Studykey.ca para ver nuestra línea de tarjetas didácticas.",
         step1:
           "<1>Paso 1 :</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
         step2:
@@ -96,16 +95,14 @@ i18n.use(initReactI18next).init({
 });
 
 const App = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({
     language: "",
-    level: "",
+
     name: "",
     email: "",
-    orderId: "",
-    set: "",
   });
-  const [activeTab, setActiveTab] = useState("mobile");
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -146,51 +143,28 @@ const App = () => {
   const nextStep = () => {
     let newErrors = {
       language: "",
-      level: "",
+
       name: "",
       email: "",
-      set: "",
-      orderId: "",
     };
 
     // Validation logic
     if (formData.language === "" && step === 1) {
       newErrors.language = "Please select an option for the language.";
     }
-    if (formData.level === "" && step === 1) {
-      newErrors.level = "Please select an option for the level.";
-    }
-    if (formData.name === "" && step === 2) {
+
+    if (formData.name === "" && step === 1) {
       newErrors.name = "Please fill in the name field.";
     }
-    if (formData.email === "" && step === 2) {
+    if (formData.email === "" && step === 1) {
       newErrors.email = "Please fill in the email field.";
-    }
-    if (formData.set === "" && step === 3) {
-      newErrors.set = "Please fill in the set field.";
-    }
-    if (formData.orderId === "" && step === 3) {
-      newErrors.orderId = "Please fill in the orderId field.";
     }
 
     setErrors(newErrors);
 
     // If all checks pass, proceed to the next step
-    if (
-      !newErrors.language &&
-      !newErrors.level &&
-      !newErrors.name &&
-      !newErrors.email &&
-      !newErrors.set &&
-      !newErrors.orderId
-    ) {
+    if (!newErrors.language && !newErrors.name && !newErrors.email) {
       setStep(step + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (step > 1) {
-      setStep(step - 1);
     }
   };
 
@@ -200,38 +174,11 @@ const App = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let newErrors = {
-      set: "",
-      orderId: "",
-    };
-
-    // Validation logic
-    if (formData.set === "" && step === 3) {
-      newErrors.set = "Please fill in the set field.";
-    }
-    if (formData.orderId === "" && step === 3) {
-      newErrors.orderId = "Please fill in the orderId field.";
-    }
-
-    setErrors(newErrors);
-
-    // If all checks pass, proceed to the next step
-    if (!newErrors.set && !newErrors.orderId) {
-      const validateOrderPromise = axios.post(
-        "https://studykey-riddles-server.vercel.app/validate-order-id",
-        { orderId: formData.orderId }
+    {
+      const submitReviewPromise = axios.post(
+        "https://studykey-riddles-server.vercel.app/submit-review",
+        formData
       );
-
-      const submitReviewPromise = validateOrderPromise.then((response) => {
-        if (response.status === 200) {
-          return axios.post(
-            "https://studykey-riddles-server.vercel.app/submit-review",
-            formData
-          );
-        } else {
-          throw new Error("Order validation failed");
-        }
-      });
 
       const wrappedPromise = new Promise((resolve, reject) => {
         submitReviewPromise
@@ -306,7 +253,7 @@ const App = () => {
       <div className="">
         {step === 1 && (
           <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
-            <div className="w-full md:w-[40%] px-5 flex flex-col items-center box-content min-h-screen">
+            <div className="w-full container mx-auto px-5 flex flex-col items-center box-content max-h-screen overflow-y-scroll no-scrollbar">
               <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full">
                 <div className="flex gap-5 mt-2 items-center">
                   <img src={"Logo.png"} alt="logo" className="w-20 h-20" />
@@ -328,7 +275,7 @@ const App = () => {
                 </p>
                 <div className="p-3">
                   <form>
-                    <label className="block mt-2 max-w-[600px]">
+                    <label className="block mt-2 w-full">
                       <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
                         {t("langQues")}
                       </span>
@@ -352,31 +299,49 @@ const App = () => {
                         <div className="text-red-500">{errors.language}</div>
                       )}
                     </label>
-                    <label className="block mb-5 max-w-[600px] mt-5">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
-                        {t("levelQues")}
-                      </span>
-                      <br></br>
-                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
-                        {t("levelPara")}
-                      </span>
-                      <select
-                        id="myInput"
-                        name="level"
-                        value={formData.level}
-                        onChange={handleChange}
-                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      >
-                        <option value="">{t("levelOption")}</option>
-                        <option value="Beginner">{t("beginner")}</option>
-                        <option value="Intermediate">
-                          {t("intermediate")}
-                        </option>
-                        <option value="Advanced">{t("advanced")}</option>
-                      </select>
-                      {errors.level && (
-                        <div className="text-red-500">{errors.level}</div>
-                      )}
+                    <label className="block mb-5 w-full mt-5">
+                      <label className="block mt-4 w-full">
+                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
+                          {t("name")}
+                        </span>
+
+                        <input
+                          id="myInput"
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          required
+                          placeholder={`"John"`}
+                          onChange={handleChange}
+                          className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                        />
+                        {errors.name && (
+                          <div className="text-red-500">{errors.name}</div>
+                        )}
+                      </label>
+                      <label className="block mb-5 w-full mt-10">
+                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
+                          {t("email")}
+                        </span>
+                        <br></br>
+                        <span className="text-sm sm:text-base md:text-lg  font-normal italic">
+                          {t("emailPara")}
+                        </span>
+
+                        <input
+                          id="myInput"
+                          type="text"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder={`"john@email.com"`}
+                          className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                        />
+
+                        {errors.email && (
+                          <div className="text-red-500">{errors.email}</div>
+                        )}
+                      </label>
                     </label>
                   </form>
                 </div>
@@ -385,411 +350,55 @@ const App = () => {
               <div className="">
                 <button
                   className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
-                  onClick={nextStep}
+                  onClick={handleSubmit}
                 >
                   {" "}
                   Next{" "}
                 </button>
               </div>
             </div>
-            <div className="w-full md:w-3/5 lg:w-7/10 xl:w-3/5 box-content">
-              <img
-                src={"firstpage.jpg"}
-                alt="Your description"
-                className="w-full min-h-screen/2 md:min-h-screen object-cover"
-              />
+            <div className="h-screen w-[70%]">
+              {language === "en" ? (
+                <img
+                  src="spanish-book-1.png"
+                  alt="rewardphoto"
+                  className="w-full h-full object-fill"
+                />
+              ) : (
+                <img
+                  src="English-book-1.png"
+                  alt="rewardphoto"
+                  className="w-full h-full object-fill"
+                />
+              )}
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
-            <div className="w-full md:w-[40%] p-5 flex flex-col items-center md:justify-center md:min-h-screen box-content">
-              <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
-                <div>
-                  <form>
-                    <label className="block mt-4 max-w-[600px]">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
-                        {t("name")}
-                      </span>
+          <div className="flex items-center justify-center h-screen ">
+            <div className="flex-1 p-10 flex-col gap-5 flex">
+              <h1 className="text-6xl text-center font-rasputin">
+                {t("thankYou")}
+                <br></br>
+                <span className="uppercase">{formData.name}!</span>
+              </h1>
 
-                      <input
-                        id="myInput"
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        required
-                        placeholder={`"John"`}
-                        onChange={handleChange}
-                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      />
-                      {errors.name && (
-                        <div className="text-red-500">{errors.name}</div>
-                      )}
-                    </label>
-                    <label className="block mb-5 max-w-[600px] mt-10">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
-                        {t("email")}
-                      </span>
-                      <br></br>
-                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
-                        {t("emailPara")}
-                      </span>
+              <p className="text-3xl text-center font-light">
+                {t("thankYouP1")}
+              </p>
 
-                      <input
-                        id="myInput"
-                        type="text"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder={`"john@email.com"`}
-                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      />
-
-                      {errors.email && (
-                        <div className="text-red-500">{errors.email}</div>
-                      )}
-                    </label>
-                  </form>
-                </div>
-              </div>
-
-              <div className="mt-10 md:mt-32">
-                {step > 1 && (
-                  <button
-                    className="bg-myOrange hover:bg-red-700 text-white font-bold py-3 px-4 text-2xl rounded"
-                    onClick={prevStep}
-                  >
-                    Back
-                  </button>
-                )}
-                {step < 4 && (
-                  <button
-                    className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
-                    onClick={nextStep}
-                  >
-                    Next
-                  </button>
-                )}
-              </div>
+              <p className="text-3xl text-center font-light">
+                {t("thankYouP2")}
+              </p>
             </div>
-            <div className="w-full md:w-3/5 flex">
+            <div className="h-full max-w-[1100px]">
               <img
-                src={"secondpage.png"}
-                alt="Your description"
-                className="w-full h-screen/2 md:h-screen object-cover bg-blueInput"
+                src="/thankyou.png"
+                className="w-full h-full"
+                alt="thankyou"
               />
             </div>
-          </div>
-        )}
-        {step === 3 && (
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-2/5 md:p-5 flex flex-col items-center justify-center md:min-h-screen box-content">
-              <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full p-3">
-                <div className="">
-                  <form>
-                    <label className="block mt-4 max-w-[600px]">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
-                        {t("setQues")}
-                      </span>
-
-                      <select
-                        id="myInput"
-                        name="set"
-                        value={formData.set}
-                        onChange={handleChange}
-                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      >
-                        <option value="">{t("levelOption")}</option>
-                        <option value="spanish multi set">
-                          Spanish Multi SET
-                        </option>
-                        <option value="spanish/eng noun set">
-                          Spanish/English Nouns SET
-                        </option>
-                        <option disabled>Coming Soon!</option>
-                      </select>
-                      {errors.set && (
-                        <div className="text-red-500">{errors.set}</div>
-                      )}
-                    </label>
-                    <label className="block mb-5 max-w-[600px] mt-10">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-3xl ">
-                        {t("orderQues")}
-                      </span>
-                      <br></br>
-                      <span className="text-sm sm:text-base md:text-lg  font-normal italic">
-                        {t("orderPara")}
-                      </span>
-
-                      <input
-                        id="myInput"
-                        type="text"
-                        name="orderId"
-                        value={formData.orderId}
-                        onChange={handleChange}
-                        placeholder={`"701-0951950-9026651"`}
-                        className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      />
-
-                      {errors.orderId && (
-                        <div className="text-red-500">{errors.orderId}</div>
-                      )}
-                    </label>
-                  </form>
-                </div>
-              </div>
-              <div className="mt-10 md:mt-32">
-                {step > 1 && (
-                  <button
-                    className="bg-myOrange hover:bg-red-700 text-white font-bold py-3 px-4 text-2xl rounded"
-                    onClick={prevStep}
-                  >
-                    Back
-                  </button>
-                )}
-
-                {step === 3 && (
-                  <button
-                    className="bg-green-500 hover:bg-green-700 text-white text-2xl font-bold py-3 px-4 rounded "
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    Submit
-                  </button>
-                )}
-              </div>
-            </div>
-            <div className="w-full md:w-3/5 lg:w-3/5 max-w-[400px] py-5 flex flex-col p-3 mx-auto md:min-h-screen box-content justify-center">
-              <h1 className="font-bold text-lg md:text-2xl mb-5">
-                {t("findOrder")}{" "}
-                <button
-                  onClick={() => setActiveTab("mobile")}
-                  className={`px-2 rounded-l py-3 text-white text-xl bg-myOrange ${
-                    activeTab === "mobile"
-                      ? "shadow-inner shadow-black"
-                      : "shadow-lg "
-                  }`}
-                >
-                  Mobile
-                </button>
-                <button
-                  onClick={() => setActiveTab("desktop")}
-                  className={`px-2 rounded-r py-3 text-white text-xl bg-blueInput ${
-                    activeTab === "desktop"
-                      ? "shadow-inner shadow-black"
-                      : "shadow-lg"
-                  }`}
-                >
-                  Desktop
-                </button>
-              </h1>
-              {activeTab === "mobile" && (
-                <div className="carousel-wrapper relative aspect-video w-full pb-10">
-                  <Carousel
-                    autoPlay={true}
-                    showArrows={true}
-                    infiniteLoop={true}
-                    showStatus={false}
-                    showThumbs={false}
-                    className="w-full h-full"
-                    renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                      hasPrev && (
-                        <button
-                          type="button"
-                          onClick={onClickHandler}
-                          title={label}
-                          style={{
-                            backgroundColor: "blueInput",
-                            position: "absolute",
-                            bottom: 10, // Position at the bottom
-                            left: "50%", // Center horizontally
-                            transform: "translateX(-100%)", // Adjust for button width
-                            zIndex: 9999,
-                          }}
-                        >
-                          <FaArrowLeft className="text-blueInput text-xl" />
-                        </button>
-                      )
-                    }
-                    renderArrowNext={(onClickHandler, hasNext, label) =>
-                      hasNext && (
-                        <button
-                          type="button"
-                          onClick={onClickHandler}
-                          title={label}
-                          style={{
-                            backgroundColor: "blueInput",
-                            position: "absolute",
-                            bottom: 10, // Position at the bottom
-                            left: "50%", // Center horizontally
-                            transform: "translateX(0%)", // Adjust for button width
-                            zIndex: 9999,
-                          }}
-                        >
-                          <FaArrowRight className="text-blueInput text-xl" />
-                        </button>
-                      )
-                    }
-                  >
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step1"
-                          components={{
-                            1: <span className="text-blueInput" />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"amazonMobile.png"}
-                        alt="Step 1"
-                        className="object-contain max-h-full mx-auto max-w-[50%]"
-                      />
-                    </div>
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step2"
-                          components={{
-                            1: <span className="text-blueInput " />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"your_order.png"}
-                        alt="Step 2"
-                        className="object-contain max-h-full mx-auto max-w-[50%]"
-                      />
-                    </div>
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step3"
-                          components={{
-                            1: <span className="text-blueInput " />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"find_order.png"}
-                        alt="Step 3"
-                        className="object-contain max-h-full mx-auto max-w-[50%]"
-                      />
-                    </div>
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step4"
-                          components={{
-                            1: <span className="text-blueInput " />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"order_details.png"}
-                        alt="Step 4"
-                        className="object-contain max-h-full mx-auto max-w-[50%]"
-                      />
-                    </div>
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step5"
-                          components={{
-                            1: <span className="text-blueInput " />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"order_id.png"}
-                        alt="Step 5"
-                        className="object-contain max-h-full mx-auto max-w-[50%]"
-                      />
-                    </div>
-                  </Carousel>
-                </div>
-              )}
-              {activeTab === "desktop" && (
-                <div className="carousel-wrapper relative aspect-video w-full">
-                  <Carousel
-                    autoPlay={true}
-                    showArrows={true}
-                    infiniteLoop={true}
-                    showStatus={false}
-                    showThumbs={false}
-                    className="w-full h-full"
-                    renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                      hasPrev && (
-                        <button
-                          type="button"
-                          onClick={onClickHandler}
-                          title={label}
-                        >
-                          <FaArrowLeft className="text-blueInput text-xl" />
-                        </button>
-                      )
-                    }
-                    renderArrowNext={(onClickHandler, hasNext, label) =>
-                      hasNext && (
-                        <button
-                          type="button"
-                          onClick={onClickHandler}
-                          title={label}
-                        >
-                          <FaArrowRight className="text-blueInput text-xl" />
-                        </button>
-                      )
-                    }
-                  >
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step1"
-                          components={{
-                            1: <span className="text-blueInput" />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"amazonDesktop1.png"}
-                        alt="Step 1"
-                        className="object-contain max-h-full mx-auto "
-                      />
-                    </div>
-                    <div className="flex flex-col items-center bg-blueBG h-full">
-                      <h2 className="text-xl md:text-2xl lg:text-3xl mb-4">
-                        <Trans
-                          i18nKey="step2"
-                          components={{
-                            1: <span className="text-blueInput " />,
-                          }}
-                        />
-                      </h2>
-                      <img
-                        src={"amazonDesktop2.jpeg"}
-                        alt="Step 2"
-                        className="object-contain max-h-full mx-auto"
-                      />
-                    </div>
-                    {/* Add more steps as needed */}
-                  </Carousel>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-        {step === 4 && (
-          <div className="flex flex-col items-center justify-center h-screen gap-5 lg:gap-10 max-w-[800px] mx-auto">
-            <h1 className="text-6xl text-center font-rasputin">
-              {t("thankYou")}
-              <br></br>
-              <span className="uppercase">{formData.name}!</span>
-            </h1>
-
-            <p className="text-3xl text-center font-light">{t("thankYouP1")}</p>
-
-            <p className="text-3xl text-center font-light">{t("thankYouP2")}</p>
           </div>
         )}
       </div>
