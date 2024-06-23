@@ -111,9 +111,7 @@ const App = () => {
   useEffect(() => {
     async function fetchLocationAndSetLanguage() {
       try {
-        const response = await axios.get(
-          "https://studykey-riddles-server.vercel.app/api/location"
-        );
+        const response = await axios.get("http://localhost:5000/api/location");
         const geo = response.data;
         const language = getLanguageFromCountryCode(geo.country); // Implement this function
         setLanguage(language);
@@ -176,7 +174,7 @@ const App = () => {
     e.preventDefault();
     {
       const submitReviewPromise = axios.post(
-        "https://studykey-riddles-server.vercel.app/submit-review",
+        "http://localhost:5000/submit-review",
         formData
       );
 
@@ -274,7 +272,7 @@ const App = () => {
                   {t("welcome")}
                 </p>
                 <div className="p-3">
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <label className="block mt-2 w-full">
                       <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
                         {t("langQues")}
@@ -329,6 +327,7 @@ const App = () => {
                         </span>
 
                         <input
+                          required
                           id="myInput"
                           type="text"
                           name="email"
@@ -343,18 +342,17 @@ const App = () => {
                         )}
                       </label>
                     </label>
+                    <div className="">
+                      <button
+                        className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
+                        type="submit"
+                      >
+                        {" "}
+                        Next{" "}
+                      </button>
+                    </div>
                   </form>
                 </div>
-              </div>
-
-              <div className="">
-                <button
-                  className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
-                  onClick={handleSubmit}
-                >
-                  {" "}
-                  Next{" "}
-                </button>
               </div>
             </div>
             <div className="h-screen w-[70%]">
