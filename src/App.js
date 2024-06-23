@@ -112,7 +112,7 @@ const App = () => {
     async function fetchLocationAndSetLanguage() {
       try {
         const response = await axios.get(
-          "https://studykey-riddles-server.vercel.app/api/location"
+          "https://studykey-gifts-server.vercel.app/api/location"
         );
         const geo = response.data;
         const language = getLanguageFromCountryCode(geo.country); // Implement this function
@@ -176,7 +176,7 @@ const App = () => {
     e.preventDefault();
     {
       const submitReviewPromise = axios.post(
-        "https://studykey-riddles-server.vercel.app/submit-review",
+        "https://studykey-gifts-server.vercel.app/submit-review",
         formData
       );
 
