@@ -95,7 +95,7 @@ Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
 });
 
 const App = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({
     language: "",
 
@@ -253,7 +253,7 @@ const App = () => {
       <div className="">
         {step === 1 && (
           <div className="flex flex-col-reverse md:flex-row items-center md:items-start">
-            <div className="w-full container mx-auto px-5 flex flex-col items-center box-content max-h-screen overflow-y-scroll no-scrollbar">
+            <div className="w-full container mx-auto md:px-5 flex flex-col items-center box-content max-h-screen overflow-y-scroll no-scrollbar">
               <div className="flex flex-col items-center gap-5 sm:gap-5 md:gap-7 w-full">
                 <div className="flex gap-5 mt-2 items-center">
                   <img src={"Logo.png"} alt="logo" className="w-20 h-20" />
@@ -357,7 +357,7 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="h-screen w-[70%]">
+            <div className="h-[40%] md:h-screen w-full md:w-[70%]">
               {language === "en" ? (
                 <img
                   src="spanish-book-1.png"
@@ -376,19 +376,19 @@ const App = () => {
         )}
 
         {step === 2 && (
-          <div className="flex items-center justify-center h-screen ">
+          <div className="flex flex-col-reverse md:flex-row items-center justify-center h-screen ">
             <div className="flex-1 p-10 flex-col gap-5 flex">
-              <h1 className="text-6xl text-center font-rasputin">
+              <h1 className="text-xl text-center font-rasputin">
                 {t("thankYou")}
                 <br></br>
                 <span className="uppercase">{formData.name}!</span>
               </h1>
 
-              <p className="text-3xl text-center font-light">
+              <p className="text-xl md:text-3xl text-center font-light">
                 {t("thankYouP1")}
               </p>
 
-              <p className="text-3xl text-center font-light">
+              <p className="text-xl md:text-3xl text-center font-light">
                 {t("thankYouP2")}
               </p>
             </div>
