@@ -95,7 +95,7 @@ Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
 });
 
 const App = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     language: "",
 
