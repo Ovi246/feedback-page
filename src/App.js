@@ -376,9 +376,9 @@ const App = () => {
         )}
 
         {step === 2 && (
-          <div className="flex flex-col-reverse md:flex-row items-center justify-center h-screen ">
-            <div className="flex-1 p-10 flex-col gap-5 flex">
-              <h1 className="text-xl text-center font-rasputin">
+          <div className="container mx-auto flex flex-col-reverse md:flex-col items-center justify-center h-screen ">
+            <div className="h-[50%] p-10 flex-col gap-5 flex">
+              <h1 className="text-xl md:text-3xl text-center font-rasputin">
                 {t("thankYou")}
                 <br></br>
                 <span className="uppercase">{formData.name}!</span>
@@ -392,7 +392,7 @@ const App = () => {
                 {t("thankYouP2")}
               </p>
             </div>
-            <div className="h-full max-w-[1100px]">
+            <div className="h-[50%]">
               <img
                 src="/thankyou.png"
                 className="w-full h-full"
