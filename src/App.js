@@ -155,7 +155,7 @@ const App = () => {
   const nextStep = () => {
     let newErrors = {
       language: "",
-
+      product: "",
       name: "",
       email: "",
     };
@@ -163,6 +163,9 @@ const App = () => {
     // Validation logic
     if (formData.language === "" && step === 1) {
       newErrors.language = "Please select an option for the language.";
+    }
+    if (formData.product === "" && step === 1) {
+      newErrors.product = "Please select an option for the product.";
     }
 
     if (formData.name === "" && step === 1) {
@@ -175,7 +178,12 @@ const App = () => {
     setErrors(newErrors);
 
     // If all checks pass, proceed to the next step
-    if (!newErrors.language && !newErrors.name && !newErrors.email) {
+    if (
+      !newErrors.language &&
+      !newErrors.name &&
+      !newErrors.email &&
+      !newErrors.product
+    ) {
       setStep(step + 1);
     }
   };
@@ -446,7 +454,9 @@ const App = () => {
 
               <div className="w-full lg:w-1/2 h-64 sm:h-80 md:h-96 lg:h-auto">
                 <img
-                  src={language === "en" ? "thankyouen.png" : "thankyouesp.png"}
+                  src={
+                    language === "en" ? "thankyoueng.png" : "thankyouesp.png"
+                  }
                   alt="rewardphoto"
                   className="w-full h-full object-contain"
                 />
