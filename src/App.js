@@ -34,6 +34,8 @@ i18n.use(initReactI18next).init({
         thankYouP2:
           "In the mean time practice makes perfect visit our website at Studykey.ca to check out our flashcard line.",
         findOrder: "How to find your Order ID",
+        reviewSection:
+          "I’d love to hear your opinion on the set your practicing with now! your feedback helps me make better tools for learners like yourself! Thank you in advance!",
         step1:
           "<1>Step 1</1> Log in to your Amazon account, at the bottom click icon.",
         step2: "<1>Step 2</1> under your account name click 'your orders'",
@@ -45,6 +47,10 @@ i18n.use(initReactI18next).init({
         advanced: "Advanced",
         english: "English",
         spanish: "Spanish",
+        productQues: "Which StudyKey product did you purchased?",
+        productOption: "Select a product",
+        multiset: "Multi Set",
+        nounset: "Noun Set",
       },
     },
     es: {
@@ -72,6 +78,8 @@ i18n.use(initReactI18next).init({
 Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
         thankYouP2:
           "Mientras tanto, la práctica hace al maestro. Visita nuestro sitio web en Studykey.ca para ver nuestra línea de tarjetas didácticas.",
+        reviewSection:
+          "¡Me encantaría conocer tu opinión sobre el conjunto con el que estás practicando ahora! ¡Tus comentarios me ayudan a crear mejores herramientas para estudiantes como tú! ¡Gracias de antemano!",
         step1:
           "<1>Paso 1 :</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
         step2:
@@ -85,6 +93,10 @@ Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
         advanced: "Avanzado",
         english: "Inglés",
         spanish: "Español",
+        productQues: "¿Qué producto de StudyKey compraste?",
+        productOption: "Selecciona un producto",
+        multiset: "Conjunto de varios",
+        nounset: "Conjunto de sustantivos",
       },
     },
     // Add more languages here
@@ -98,7 +110,7 @@ const App = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     language: "",
-
+    product: "",
     name: "",
     email: "",
   });
@@ -319,7 +331,29 @@ const App = () => {
                           <div className="text-red-500">{errors.name}</div>
                         )}
                       </label>
-                      <label className="block mb-5 w-full mt-10">
+                      <label className="block mt-5 w-full">
+                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
+                          {t("productQues")}
+                        </span>
+                        <br></br>
+
+                        <select
+                          id="myInput"
+                          name="product"
+                          value={formData.product}
+                          required
+                          onChange={handleChange}
+                          className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
+                        >
+                          <option value="">{t("productOption")}</option>
+                          <option value="MultiSet">{t("multiset")}</option>
+                          <option value="NounSet">{t("nounset")}</option>
+                        </select>
+                        {errors.product && (
+                          <div className="text-red-500">{errors.product}</div>
+                        )}
+                      </label>
+                      <label className="block mb-5 w-full mt-5">
                         <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
                           {t("email")}
                         </span>
@@ -376,28 +410,47 @@ const App = () => {
         )}
 
         {step === 2 && (
-          <div className="container mx-auto flex flex-col-reverse md:flex-col items-center justify-center h-screen ">
-            <div className="h-[50%] p-10 flex-col gap-5 flex">
-              <h1 className="text-xl md:text-3xl text-center font-rasputin">
-                {t("thankYou")}
-                <br></br>
-                <span className="uppercase">{formData.name}!</span>
-              </h1>
+          <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
+              <div className="w-full lg:w-1/2 space-y-6 text-center">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-rasputin">
+                  {t("thankYou")}
+                  <br />
+                  <span className="uppercase block mt-2">
+                    {formData.name}!{" "}
+                  </span>
+                </h1>
 
-              <p className="text-xl md:text-3xl text-center font-light">
-                {t("thankYouP1")}
-              </p>
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light">
+                  {t("thankYouP1")}
+                </p>
 
-              <p className="text-xl md:text-3xl text-center font-light">
-                {t("thankYouP2")}
-              </p>
-            </div>
-            <div className="h-[50%]">
-              <img
-                src="/thankyou.png"
-                className="w-full h-full"
-                alt="thankyou"
-              />
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light">
+                  {t("thankYouP2")}
+                </p>
+
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light ">
+                  {t("reviewSection")}
+                </p>
+                <a
+                  href={
+                    formData.product === "MultiSet"
+                      ? "https://www.amazon.com/review/create-review/?ie=UTF8&channel=glance-detail&asin=B0BY3CV2QD"
+                      : "https://www.amazon.com/review/create-review/?ie=UTF8&channel=glance-detail&asin=B0CSB1X6BM"
+                  }
+                  className="text-myOrange block"
+                >
+                  Your Feedback
+                </a>
+              </div>
+
+              <div className="w-full lg:w-1/2 h-64 sm:h-80 md:h-96 lg:h-auto">
+                <img
+                  src={language === "en" ? "thankyouen.png" : "thankyouesp.png"}
+                  alt="rewardphoto"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
           </div>
         )}
