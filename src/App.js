@@ -107,7 +107,7 @@ Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
 });
 
 const App = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({
     language: "",
     product: "",
@@ -419,7 +419,7 @@ const App = () => {
 
         {step === 2 && (
           <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
-            <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
+            <div className="flex flex-col  items-center justify-center gap-8 lg:gap-16">
               <div className="w-full lg:w-1/2 space-y-6 text-center">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-rasputin">
                   {t("thankYou")}
@@ -437,19 +437,20 @@ const App = () => {
                   {t("thankYouP2")}
                 </p>
 
-                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light ">
-                  {t("reviewSection")}
-                </p>
                 <a
                   href={
                     formData.product === "MultiSet"
                       ? "https://www.amazon.com/review/create-review/?ie=UTF8&channel=glance-detail&asin=B0BY3CV2QD"
                       : "https://www.amazon.com/review/create-review/?ie=UTF8&channel=glance-detail&asin=B0CSB1X6BM"
                   }
-                  className="text-myOrange block"
+                  className="text-white block font-bold text-2xl px-4 py-2 bg-myOrange"
                 >
                   Your Feedback
                 </a>
+
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light ">
+                  {t("reviewSection")}
+                </p>
               </div>
 
               <div className="w-full lg:w-1/2 h-64 sm:h-80 md:h-96 lg:h-auto">
