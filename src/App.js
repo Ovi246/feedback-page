@@ -35,7 +35,7 @@ i18n.use(initReactI18next).init({
           "In the mean time practice makes perfect visit our website at Studykey.ca to check out our flashcard line.",
         findOrder: "How to find your Order ID",
         reviewSection:
-          "I’d love to hear your opinion on the set your practicing with now! your feedback helps me make better tools for learners like yourself! Thank you in advance!",
+          "I'd love to hear your opinion on the set your practicing with now! your feedback helps me make better tools for learners like yourself! Thank you in advance!",
         step1:
           "<1>Step 1</1> Log in to your Amazon account, at the bottom click icon.",
         step2: "<1>Step 2</1> under your account name click 'your orders'",
@@ -83,10 +83,10 @@ Te enviaremos por correo electrónico tu FOLLETO DE E-PRÁCTICA GRATIS.`,
         step1:
           "<1>Paso 1 :</1> Inicia sesión en tu cuenta de Amazon, en la parte inferior haz clic en este ícono.",
         step2:
-          "<1>Paso 2 :</1> bajo el nombre de tu cuenta haz clic en “tus pedidos”.",
+          "<1>Paso 2 :</1> bajo el nombre de tu cuenta haz clic en \"tus pedidos\".",
         step3: "<1>Paso 3</1> Encuentra tu pedido y haz clic en él.",
         step4:
-          "<1>Paso 4</1> desplázate hacia abajo y haz clic en “Ver detalles del pedido.",
+          "<1>Paso 4</1> desplázate hacia abajo y haz clic en \"Ver detalles del pedido.\"",
         step5: "<1>Paso 5</1> Verás tu ID de pedido.",
         beginner: "Principiante",
         intermediate: "Intermedio",
@@ -124,7 +124,7 @@ const App = () => {
     async function fetchLocationAndSetLanguage() {
       try {
         const response = await axios.get(
-          "https://studykey-riddles-server.vercel.app/api/location"
+          "http://localhost:5000/api/location"
         );
         const geo = response.data;
         const language = getLanguageFromCountryCode(geo.country); // Implement this function
@@ -196,7 +196,7 @@ const App = () => {
     e.preventDefault();
     {
       const submitReviewPromise = axios.post(
-        "https://studykey-riddles-server.vercel.app/submit-review",
+        "http://localhost:5000/submit-review",
         formData
       );
 
@@ -294,108 +294,8 @@ const App = () => {
                   {t("welcome")}
                 </p>
                 <div className="p-3">
-                  <form onSubmit={handleSubmit}>
-                    <label className="block mt-2 w-full">
-                      <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
-                        {t("langQues")}
-                      </span>
-                      <br></br>
-                      <span className="text-sm sm:text-base md:text-lg font-normal italic">
-                        {t("langPara")}
-                      </span>
-                      <select
-                        id="myInput"
-                        name="language"
-                        value={formData.language}
-                        required
-                        onChange={handleChange}
-                        className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                      >
-                        <option value="">{t("langOption")}</option>
-                        <option value="English">{t("english")}</option>
-                        <option value="Spanish">{t("spanish")}</option>
-                      </select>
-                      {errors.language && (
-                        <div className="text-red-500">{errors.language}</div>
-                      )}
-                    </label>
-                    <label className="block mb-5 w-full mt-5">
-                      <label className="block mt-4 w-full">
-                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
-                          {t("name")}
-                        </span>
-
-                        <input
-                          id="myInput"
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          required
-                          placeholder={`"John"`}
-                          onChange={handleChange}
-                          className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                        />
-                        {errors.name && (
-                          <div className="text-red-500">{errors.name}</div>
-                        )}
-                      </label>
-                      <label className="block mt-5 w-full">
-                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
-                          {t("productQues")}
-                        </span>
-                        <br></br>
-
-                        <select
-                          id="myInput"
-                          name="product"
-                          value={formData.product}
-                          required
-                          onChange={handleChange}
-                          className="mt-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xlplaceholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                        >
-                          <option value="">{t("productOption")}</option>
-                          <option value="MultiSet">{t("multiset")}</option>
-                          <option value="NounSet">{t("nounset")}</option>
-                        </select>
-                        {errors.product && (
-                          <div className="text-red-500">{errors.product}</div>
-                        )}
-                      </label>
-                      <label className="block mb-5 w-full mt-5">
-                        <span className="uppercase font-semibold text-lg sm:text-xl md:text-2xl ">
-                          {t("email")}
-                        </span>
-                        <br></br>
-                        <span className="text-sm sm:text-base md:text-lg  font-normal italic">
-                          {t("emailPara")}
-                        </span>
-
-                        <input
-                          required
-                          id="myInput"
-                          type="text"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          placeholder={`"john@email.com"`}
-                          className="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-blueInput p-3 text-lg sm:text-xl md:text-2xl lg:text-3xl placeholder:text-blueText placeholder:opacity-50 placeholder:text-2xl"
-                        />
-
-                        {errors.email && (
-                          <div className="text-red-500">{errors.email}</div>
-                        )}
-                      </label>
-                    </label>
-                    <div className="">
-                      <button
-                        className="bg-blueInput hover:bg-blue-700 text-white font-bold py-3 px-4 text-2xl rounded "
-                        type="submit"
-                      >
-                        {" "}
-                        Next{" "}
-                      </button>
-                    </div>
-                  </form>
+                  {/* Download dropdown and button */}
+                  <DownloadBooklet language={language} />
                 </div>
               </div>
             </div>
@@ -469,5 +369,34 @@ const App = () => {
     </div>
   );
 };
+
+function DownloadBooklet({ language }) {
+  const pdfLinks = {
+    en: {
+      label: "English E-Practice Booklet",
+      url: "https://firebasestorage.googleapis.com/v0/b/studykey-b1dc7.appspot.com/o/reward_english.pdf?alt=media&token=b81ce30b-af3f-438b-83f7-5665abe308b2",
+    },
+    es: {
+      label: "Spanish E-Practice Booklet",
+      url: "https://firebasestorage.googleapis.com/v0/b/studykey-b1dc7.appspot.com/o/reward_spanish.pdf?alt=media&token=83156c62-04da-4c6f-bdb9-b215b5ec2d07",
+    },
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <a
+        href={pdfLinks[language].url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-myOrange hover:bg-orange-600 text-white font-bold py-4 px-8 text-2xl rounded-lg transition-colors duration-200 shadow-lg"
+      >
+        Download Now
+      </a>
+      <p className="text-center text-lg text-blueText">
+        Click Download Now to get your {pdfLinks[language].label}!
+      </p>
+    </div>
+  );
+}
 
 export default App;
